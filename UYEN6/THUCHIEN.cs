@@ -12,7 +12,7 @@ namespace BaiTap
     {
         static void Main()
         {
-            Sapxep N = new Sapxep();
+            //Sapxep N = new Sapxep();
             String Text = File.ReadAllText(@"C:\Users\ADMIN\Desktop\List.txt");
             List<int> Input = new List<int>();
             String[] Cut = Text.Split(';');
@@ -20,18 +20,18 @@ namespace BaiTap
             {
                 Input.Add(Convert.ToInt32(Cut[x]));
             }
-
+            Stopwatch mStopwatch = new Stopwatch();
             List<int> A1 = new List<int>();
             foreach (int x in Input)
             {
                 A1.Add(x);
-            }
+            }            
             // dem thoi gian BubbleSort
-            Stopwatch tg1 = new Stopwatch();
-            tg1.Start();            
-            N.BubbleSort(A1);
-            tg1.Stop();
-            Console.WriteLine("\nThoi gian thuc hien Bubble Sort: {0} giay", tg1.Elapsed.ToString());
+            
+            mStopwatch.Start();            
+            Sapxep.BubbleSort(A1);
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien Bubble Sort: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output1 = new StreamWriter("List1.txt"))
             {
                 foreach (int a in A1)
@@ -45,12 +45,12 @@ namespace BaiTap
             {
                 A2.Add(x);
             }
-            // dem thoi gian SelectionSort
-            Stopwatch tg2 = new Stopwatch();
-            tg2.Start();            
-            N.SelectionSort(A2);
-            tg2.Stop();
-            Console.WriteLine("\nThoi gian thuc hien SelectionSort: {0} giay", tg2.Elapsed.ToString());
+            mStopwatch.Reset();
+            // dem thoi gian SelectionSort            
+            mStopwatch.Start();            
+            Sapxep.SelectionSort(A2);
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien SelectionSort: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output2 = new StreamWriter("List2.txt"))
             {
                 foreach (int a in A2)
@@ -64,12 +64,12 @@ namespace BaiTap
             {
                 A3.Add(x);
             }
-            //dem thoi gian MergeSort
-            Stopwatch tg3 = new Stopwatch();
-            tg3.Start();
-            N.SelectionSort(A3);
-            tg3.Stop();
-            Console.WriteLine("\nThoi gian thuc hien MergeSort: {0} giay", tg3.Elapsed.ToString());
+            mStopwatch.Reset();
+            //dem thoi gian MergeSort            
+            mStopwatch.Start();
+            Sapxep.SelectionSort(A3);
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien MergeSort: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output3 = new StreamWriter("List3.txt"))
             {
                 foreach (int a in A3)
@@ -83,12 +83,12 @@ namespace BaiTap
             {
                 A4.Add(x);
             }
-            //dem thoi gian MergeSort
-            Stopwatch tg4 = new Stopwatch();
-            tg4.Start();
-            N.QuickSort(A4);
-            tg4.Stop();
-            Console.WriteLine("\nThoi gian thuc hien Quick Sort: {0} giay", tg4.Elapsed.ToString());
+            mStopwatch.Reset();
+            //dem thoi gian MergeSort            
+            mStopwatch.Start();
+            Sapxep.QuickSort(A4);
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien Quick Sort: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output4 = new StreamWriter("List4.txt"))
             {
                 foreach (int a in A4)
@@ -103,11 +103,11 @@ namespace BaiTap
                 A5.Add(x);
             }
             //dem thoi gian MergeSort
-            Stopwatch tg5 = new Stopwatch();
-            tg5.Start();
-            N.SapXepList(A5);
-            tg5.Stop();
-            Console.WriteLine("\nThoi gian thuc hien cach sap xep qua List moi: {0} giay", tg5.Elapsed.ToString());
+            mStopwatch.Reset();
+            mStopwatch.Start();
+            Sapxep.SapXepList(A5);
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien cach sap xep qua List moi: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output5 = new StreamWriter("List5.txt"))
             {
                 foreach (int a in A5)
@@ -121,11 +121,11 @@ namespace BaiTap
             {
                 A6.Add(x);
             }
-            Stopwatch tg6 = new Stopwatch();
-            tg6.Start();
+            mStopwatch.Reset();
+            mStopwatch.Start();
             A6.Sort();
-            tg6.Stop();
-            Console.WriteLine("\nThoi gian thuc hien SortList: {0} giay", tg6.Elapsed.ToString());
+            mStopwatch.Stop();
+            Console.WriteLine("\nThoi gian thuc hien SortList: {0} ms", mStopwatch.ElapsedMilliseconds);
             using (StreamWriter Output6 = new StreamWriter("List6.txt"))
             {
                 foreach (int a in A6)

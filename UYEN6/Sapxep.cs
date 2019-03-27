@@ -7,9 +7,9 @@ using System.IO;
 using System.Diagnostics;
 namespace BaiTap
 {
-    class Sapxep
+    public static class Sapxep
     {
-        public void BubbleSort(List<int> List)
+        public static IList<int> BubbleSort(IList<int> List)
         {            
             int i, v;
             for (i = 0; i < List.Count; i++)
@@ -24,10 +24,11 @@ namespace BaiTap
                     }
                 }
             }
-            //Console.WriteLine(String.Join(" -> ", List));            
+            //Console.WriteLine(String.Join(" -> ", List)); 
+            return List;
         }
 
-        public void SelectionSort(List<int> List)
+        public static IList<int> SelectionSort(IList<int> List)
         {
             int i, j, min, tg;
             for (i = 0; i < List.Count; i++)
@@ -45,6 +46,7 @@ namespace BaiTap
                 List[i] = tg;
             }
             //Console.WriteLine(String.Join(" -> ", List));
+            return List;
         }
 
         public static List<int> MergeSort(List<int> CSX)
@@ -99,9 +101,10 @@ namespace BaiTap
             return KQ;
         }
 
-        public void QuickSort(List<int> List)
+        public static IList<int> QuickSort(List<int> List)
         {
             Quick(List, 0, List.Count-1);
+            return List;
         }
 
         private static void Quick(List<int> List, int T, int P)
@@ -147,10 +150,10 @@ namespace BaiTap
             }
         }
 
-        public void SapXepList(List<int> List)
+        public static IList<int> SapXepList(IList<int> List)
         {
             int dem, i;
-            List<int> Output = new List<int>();
+            IList<int> Output = new List<int>();
             for (i = 0; i < List.Count; i++)
             {
                 dem = -1;
@@ -176,6 +179,7 @@ namespace BaiTap
             {
                 List.Add(y);
             }
+            return List;
         }        
     }
 }
