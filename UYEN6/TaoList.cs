@@ -21,7 +21,7 @@ namespace BaiTap
                     List.Add(a);
                 }
             }
-            //Console.Write(String.Join(";", List));
+            Console.Write(String.Join(";", List));
             using (StreamWriter Text = new StreamWriter("Text.txt"))
             {
                 foreach (int i in List)
