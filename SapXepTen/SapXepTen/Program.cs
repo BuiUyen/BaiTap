@@ -6,10 +6,34 @@ using System.Threading.Tasks;
 
 namespace SapXepTen
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
+            List<HocSinh> mHocSinh = new List<HocSinh>();           
+
+            mHocSinh.Add(new HocSinh("nguyen hoang nam", 18, "nam"));
+            mHocSinh.Add(new HocSinh("le tuan anh", 5, "nam"));
+            mHocSinh.Add(new HocSinh("nguyen thi huyen", 10, "nu"));
+            mHocSinh.Add(new HocSinh("vu binh duong", 16, "nam"));
+            mHocSinh.Add(new HocSinh("pham thi hue", 20, "nu"));
+            mHocSinh.Add(new HocSinh("nguyen thi chinh", 11, "nu"));
+            mHocSinh.Add(new HocSinh("le thi hoai", 10, "nu"));
+            mHocSinh.Add(new HocSinh("phan thi hong hao", 18, "nu"));
+            mHocSinh.Add(new HocSinh("pham duc huy", 5, "nam"));
+            mHocSinh.Add(new HocSinh("nguyen thi huyen", 22,"nu"));
+            mHocSinh.Add(new HocSinh("pham thi chinh", 22, "nu"));
+
+            Console.WriteLine("\nDanh sach hoc sinh: ");
+            //mHocSinh.Sort();
+            //mHocSinh.Sort(new HocSinh.PersonNameComparer());
+
+            HocSinh.PersonNameComparer Theoten = new HocSinh.PersonNameComparer();
+            foreach (HocSinh HS in mHocSinh)
+            {
+                Console.WriteLine(HS.HoTen+"  "+HS.Tuoi+"  "+HS.GioiTinh);
+            }
+            Console.ReadKey();
         }
-    }
+    }    
 }
