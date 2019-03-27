@@ -10,7 +10,7 @@ namespace SapXepTen
     {
         public static void Main()
         {
-            List<HocSinh> mHocSinh = new List<HocSinh>();           
+            IList<HocSinh> mHocSinh = new List<HocSinh>();           
 
             mHocSinh.Add(new HocSinh("nguyen hoang nam", 18, "nam"));
             mHocSinh.Add(new HocSinh("le tuan anh", 5, "nam"));
@@ -27,11 +27,11 @@ namespace SapXepTen
             Console.WriteLine("\nDanh sach hoc sinh: ");
             //mHocSinh.Sort();
             //mHocSinh.Sort(new HocSinh.PersonNameComparer());
-
-            HocSinh.PersonNameComparer Theoten = new HocSinh.PersonNameComparer();
+            //mHocSinh.OrderBy(x => x.Tuoi);
+            
             foreach (HocSinh HS in mHocSinh)
             {
-                Console.WriteLine(HS.HoTen+"  "+HS.Tuoi+"  "+HS.GioiTinh);
+                Console.WriteLine(HS.HoTen+" ; "+HS.Tuoi+" ; "+HS.GioiTinh);
             }
             Console.ReadKey();
         }

@@ -24,7 +24,7 @@ namespace SapXepTen
             {
                 return x.HoTen.CompareTo(y.HoTen);
             }
-        }               
+        }
 
         public HocSinh(string hoten, int tuoi, string gioitinh)
         {
@@ -32,8 +32,7 @@ namespace SapXepTen
             this.Tuoi = tuoi;
             this.GioiTinh = gioitinh;
             string[] Cut = hoten.Split(' ');
-            this.Ten = Cut[Cut.Count() - 1];
-            
+            this.Ten = Cut[Cut.Count() - 1];            
         }
     }
 }
