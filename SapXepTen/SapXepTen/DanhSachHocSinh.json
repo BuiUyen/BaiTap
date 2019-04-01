@@ -1,0 +1,55 @@
+{
+  "SoLuong": 10,
+  "DanhSachHocSinh": [
+    {
+      "HoTen": "Tran Thi Binh",
+      "Tuoi": 9,
+      "GioiTinh": "Nu"
+    },
+    {
+      "HoTen": "Nguyen Van Tu",
+      "Tuoi": 8,
+      "GioiTinh": "Nam"
+    },
+    {
+      "HoTen": "Nguyen Chi An",
+      "Tuoi": 7,
+      "GioiTinh": "Nam"
+    },
+    {
+      "HoTen": "Duong Chi Tu",
+      "Tuoi": 10,
+      "GioiTinh": "Nam"
+    },
+    {
+      "HoTen": "Nguyen Thi Binh",
+      "Tuoi": 6,
+      "GioiTinh": "Nu"
+    },
+    {
+      "HoTen": "Nguyen Chi Binh",
+      "Tuoi": 9,
+      "GioiTinh": "Nam"
+    },
+    {
+      "HoTen": "Nguyen Chi An",
+      "Tuoi": 11,
+      "GioiTinh": "Nu"
+    },
+    {
+      "HoTen": "Tran Chi An",
+      "Tuoi": 8,
+      "GioiTinh": "Nu"
+    },
+    {
+      "HoTen": "Duong Thi Tu",
+      "Tuoi": 9,
+      "GioiTinh": "Nu"
+    },
+    {
+      "HoTen": "Duong Thi An",
+      "Tuoi": 12,
+      "GioiTinh": "Nu"
+    }
+  ]
+}
