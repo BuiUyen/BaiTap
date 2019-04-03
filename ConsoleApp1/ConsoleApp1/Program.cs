@@ -4,9 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace BaiTap2
 {
+    public class LopHS
+    {
+        public int SoLuong { get; set; }
+        public List<HocSinh> DanhSachHocSinh { get; set; }
+    }
     public class HocSinh
     {
         public enum Quydoi
@@ -36,74 +43,80 @@ namespace BaiTap2
     }
 
     class UYEN
-    {
+    { 
         static void Main()
         {
-            List<HocSinh> DanhSach = new List<HocSinh>()
-            {
-                new HocSinh (1,"Nguyen Van X",14,"nam"),
-                new HocSinh (2,"Nguyen Hoang Nam",18,"nam"),
-                new HocSinh (3,"Giu Tuan H",5, "nam"),
-                new HocSinh (4,"Bui Thi Huyen",10,"nu"),
-                new HocSinh (5,"Vu Binh Duong",16, "nam"),
-                new HocSinh (6,"Pham Thi Hue", 20,"nu"),
-                new HocSinh (7,"Nguyen Thi Chinh",11, "nu"),
-                new HocSinh (8,"Phan Thi Yen",10, "nu"),
-                new HocSinh (9,"Dinh Thi Hong Anh", 18, "nu"),
-                new HocSinh (10,"Pham Duc Huy",5, "nam"),
-                new HocSinh (11,"Nguyen Thi Huyen", 8, "nu"),
-                new HocSinh (12,"Pham Thi Chi",22, "nam"),
-            };            
+            String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSachHocSinh.json");
+
+            LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
+
+            //try
+            //{
+            //    LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+
             List<HocSinh> DanhSach1 = new List<HocSinh>();
             List<HocSinh> DanhSach2 = new List<HocSinh>();
             List<HocSinh> DanhSach3 = new List<HocSinh>();
             List<HocSinh> DanhSach4 = new List<HocSinh>();
-            foreach (HocSinh HS in DanhSach)
+            List<HocSinh> DanhSach5 = new List<HocSinh>();
+            foreach (HocSinh HS in List.DanhSachHocSinh)
             {
                 DanhSach1.Add(HS);
                 DanhSach2.Add(HS);
                 DanhSach3.Add(HS);
                 DanhSach4.Add(HS);
+                DanhSach5.Add(HS);
             }
-            TachTen(DanhSach);
-            InDanhSach(DanhSach);
+            TachTen(List.DanhSachHocSinh);
+            InDanhSach(List.DanhSachHocSinh);
 
-            start:
+        start:
             int ThuocTinh = LuaChon();
             if (ThuocTinh == 6)
             {
                 Console.WriteLine("\n------------Close!!!------------");
                 goto end;
-            }                
+            }
             if (ThuocTinh == 5)
             {
-                InDanhSach(SapXepGTvaT(DanhSach4, ThuocTinh));
+                InDanhSach(SapXepGTvaT(DanhSach5));
                 goto end;
             }
             Stopwatch tg = new Stopwatch();
-            //------------------------------Do thoi gian----------------------------------------------------------
+            //------------------------------Do thoi gian--------------------------------------------------------
             tg.Start();
-            InDanhSach( SapXep(DanhSach1, ThuocTinh));
+            InDanhSach(SapXep(DanhSach1, ThuocTinh));
             tg.Stop();
             Console.WriteLine("\nThoi gian thuc hien sap xep qua List moi: " + tg.ElapsedMilliseconds + "ms.");
-            ////-------------------------------Sap xep noi bot------------------------------------------------------
-            //tg.Start();
-            //InDanhSach(SapXepNoiBot(DanhSach2, ThuocTinh));
-            //tg.Stop();
-            //Console.WriteLine("\nThoi gian thuc hien sap xep noi bot: " + tg.ElapsedMilliseconds+ "ms.");
-            ////----------------------------------------------------------------------------------------------------
-            //tg.Start();
-            //InDanhSach(SapXepLinq(DanhSach3, ThuocTinh));
-            //tg.Stop();
-            //Console.WriteLine("\nThoi gian thuc hien sap xep Linq: " + tg.ElapsedMilliseconds + "ms.");
-            ////----------------------------------------------------------------------------------------------------
+            //-------------------------------Sap xep noi bot----------------------------------------------------
+            tg.Start();
+            InDanhSach(SapXepNoiBot(DanhSach2, LuaChon()));
+            tg.Stop();
+            Console.WriteLine("\nThoi gian thuc hien sap xep noi bot: " + tg.ElapsedMilliseconds + "ms.");
+            //--------------------------------Sap xep Linq------------------------------------------------------
+            tg.Start();
+            InDanhSach(SapXepLinq(DanhSach3, LuaChon()));
+            tg.Stop();
+            Console.WriteLine("\nThoi gian thuc hien sap xep Linq: " + tg.ElapsedMilliseconds + "ms.");
+            //--------------------------------Sap xep SelectionSort---------------------------------------------
+            tg.Start();
+            InDanhSach(SelectionSort(DanhSach4, LuaChon()));
+            tg.Stop();
+            Console.WriteLine("\nThoi gian thuc hien sap xep SelectionSort: " + tg.ElapsedMilliseconds + "ms.");
+            //--------------------------------------------------------------------------------------------------
+
             goto start;
-            end:
+        end:
             Console.ReadKey();
         }
 
-        //----------------------------------Phan sap xep chinh----------------------------------------------------
-        static List<HocSinh> SapXep( List<HocSinh> Input, int ThuocTinh)
+        //----------------------------------Phan sap xep chinh---------------------------------------------------
+        static List<HocSinh> SapXep(List<HocSinh> Input, int ThuocTinh)
         {
             List<HocSinh> Output = new List<HocSinh>();
             int i, j, dem;
@@ -128,13 +141,13 @@ namespace BaiTap2
         }
 
         //----------------------------------Cach sap xep noi bot--------------------------------------------------
-        static List<HocSinh> SapXepNoiBot( List<HocSinh> Input, int ThuocTinh)
+        static List<HocSinh> SapXepNoiBot(List<HocSinh> Input, int ThuocTinh)
         {
-            for ( int i = 0 ; i < Input.Count ; i++)
+            for (int i = 0; i < Input.Count; i++)
             {
                 for (int j = i + 1; j < Input.Count; j++)
                 {
-                    if (SoSanhPhanTu(Input[i], Input[j], ThuocTinh)==Input[j].ID)
+                    if (SoSanhPhanTu(Input[i], Input[j], ThuocTinh) == Input[j].ID)
                     {
                         HocSinh TG = Input[i];
                         Input[i] = Input[j];
@@ -165,7 +178,29 @@ namespace BaiTap2
                 case (int)HocSinh.Quydoi.GioiTinh:
                     Input = Input.OrderBy(x => x.GioiTinh).ToList();
                     break;
-            }            
+            }
+            return Input;
+        }
+
+        //----------------------------------Sap xep SelectionSort-------------------------------------------------
+        public static List<HocSinh> SelectionSort(List<HocSinh> Input, int ThuocTinh)
+        {
+            int i, j, min;
+            for (i = 0; i < Input.Count; i++)
+            {
+                min = i;
+                for (j = i + 1; j < Input.Count; j++)
+                {
+                    if (SoSanhPhanTu(Input[min], Input[j], ThuocTinh) == Input[j].ID)
+                    {
+                        min = j;
+                    }
+                }
+                HocSinh tg = Input[min];
+                Input[min] = Input[i];
+                Input[i] = tg;
+            }
+            //Console.WriteLine(String.Join(" -> ", List));
             return Input;
         }
 
@@ -174,7 +209,7 @@ namespace BaiTap2
         {
             List<HocSinh> Output = new List<HocSinh>();
 
-            foreach(HocSinh HS in Input)
+            foreach (HocSinh HS in Input)
             {
                 if (HS.GioiTinh == "nam")
                 {
@@ -196,11 +231,11 @@ namespace BaiTap2
             }
             return Output;
         }
-        static List<HocSinh> SapXepGTvaT(List<HocSinh> Input,int ThuocTinh)
+        static List<HocSinh> SapXepGTvaT(List<HocSinh> Input)
         {
             List<HocSinh> Output = SapXep(NamHocSinh(Input), 3);
 
-            foreach (HocSinh HS in SapXep(NuHocSinh(Input),3))
+            foreach (HocSinh HS in SapXep(NuHocSinh(Input), 3))
             {
                 Output.Add(HS);
             }
@@ -266,7 +301,7 @@ namespace BaiTap2
             Console.WriteLine("5. Sap xep theo gioi tinh roi theo ten.");
             Console.WriteLine("6. Thoat.");
             Console.Write("=======>Lua chon:");
-            int TT = Convert.ToInt32(Console.ReadLine());            
+            int TT = Convert.ToInt32(Console.ReadLine());
             return TT;
         }
 
@@ -277,7 +312,7 @@ namespace BaiTap2
             foreach (HocSinh HS in Input)
             {
                 Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
-            }            
+            }
         }
 
         //------------------------------------Chon ra so dung truoc-----------------------------------------------
@@ -291,25 +326,28 @@ namespace BaiTap2
         }
 
         //------------------------------------Chon ra string dung truoc-------------------------------------------
-        static string SortText(string a, string b)
+        static string SortText(string _a, string _b)
         {
+            string a = _a ?? "";
+            string b = _b ?? "";
+
             for (int i = 0; i < Math.Min(a.Length, b.Length); i++)
             {
                 if (a[i] < b[i])
-                {                    
+                {
                     return a;
                 }
-                else if(a[i] > b[i])
-                {                    
+                else if (a[i] > b[i])
+                {
                     return b;
                 }
                 if (a[i] == b[i])
                 {
-                    if (i == a.Length - 1)  return a;
+                    if (i == a.Length - 1) return a;
                     if (i == b.Length - 1) return b;
-                }               
+                }
             }
             return b;
-        }        
+        }
     }
 }
