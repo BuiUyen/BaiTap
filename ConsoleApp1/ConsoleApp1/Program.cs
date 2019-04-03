@@ -46,7 +46,7 @@ namespace BaiTap2
     { 
         static void Main()
         {
-            String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSachHocSinh.json");
+            String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json");
 
             LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
 
