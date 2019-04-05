@@ -16,6 +16,7 @@ namespace TaoJson
             public int SoLuong { get; set; }
             public List<HocSinh> DanhSachHocSinh { get; set; }
         }
+
         public class HocSinh
         {
             public int ID { get; set; }
@@ -52,11 +53,11 @@ namespace TaoJson
             string json = JsonConvert.SerializeObject(Output);//Tao ra file json
 
             File.WriteAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json", json);
-            
-            //foreach (HocSinh HS in DanhSach)
-            //{
-            //    Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
-            //}
+
+            foreach (HocSinh HS in DanhSach)
+            {
+                Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
+            }
             Console.ReadKey();
         }
 

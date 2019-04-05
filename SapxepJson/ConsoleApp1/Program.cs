@@ -43,7 +43,7 @@ namespace BaiTap2
     }
 
     class UYEN
-    { 
+    {
         static void Main()
         {
             String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json");
@@ -87,28 +87,36 @@ namespace BaiTap2
                 InDanhSach(SapXepGTvaT(DanhSach5));
                 goto end;
             }
+
             Stopwatch tg = new Stopwatch();
             //------------------------------Do thoi gian--------------------------------------------------------
             tg.Start();
             InDanhSach(SapXep(DanhSach1, ThuocTinh));
             tg.Stop();
             Console.WriteLine("\nThoi gian thuc hien sap xep qua List moi: " + tg.ElapsedMilliseconds + "ms.");
+            tg.Reset();
             //-------------------------------Sap xep noi bot----------------------------------------------------
             tg.Start();
             InDanhSach(SapXepNoiBot(DanhSach2, LuaChon()));
             tg.Stop();
             Console.WriteLine("\nThoi gian thuc hien sap xep noi bot: " + tg.ElapsedMilliseconds + "ms.");
+            tg.Reset();
             //--------------------------------Sap xep Linq------------------------------------------------------
             tg.Start();
             InDanhSach(SapXepLinq(DanhSach3, LuaChon()));
             tg.Stop();
             Console.WriteLine("\nThoi gian thuc hien sap xep Linq: " + tg.ElapsedMilliseconds + "ms.");
+            tg.Reset();
             //--------------------------------Sap xep SelectionSort---------------------------------------------
             tg.Start();
             InDanhSach(SelectionSort(DanhSach4, LuaChon()));
             tg.Stop();
             Console.WriteLine("\nThoi gian thuc hien sap xep SelectionSort: " + tg.ElapsedMilliseconds + "ms.");
+            tg.Reset();
             //--------------------------------------------------------------------------------------------------
+
+            XuatJson(SapXep(DanhSach1, LuaChon()));
+            Console.WriteLine(" Da xuat file ket qua sap xep !!!");
 
             goto start;
         end:
@@ -348,6 +356,17 @@ namespace BaiTap2
                 }
             }
             return b;
+        }
+
+        //------------------------------------Xuat file json------------------------------------------------------
+        static void XuatJson(List<HocSinh> Input)
+        {
+            LopHS XuatDS = new LopHS();
+
+            XuatDS.SoLuong = 10000;
+            XuatDS.DanhSachHocSinh = Input;
+            string json = JsonConvert.SerializeObject(XuatDS);
+            File.WriteAllText(@"C:\Users\ADMIN\Desktop\DanhSachKetQua.json", json);
         }
     }
 }
