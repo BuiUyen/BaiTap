@@ -36,7 +36,7 @@ namespace TestTCP
             while (true)
             {
                 // 2. Nhan du lieu               
-                string str = reader.ReadLine();
+                string str = reader.ReadToEnd();
                 //Console.WriteLine(Sapxep.SX(str, 3));
 
                 // 3. Gui ket qua
