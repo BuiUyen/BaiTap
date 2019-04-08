@@ -28,7 +28,6 @@ namespace TaoXml
             public int Tuoi { get; set; }
             [XmlElement(ElementName = "GioiTinh")]
             public string GioiTinh { get; set; }
-
             public string Ten { get; set; }
 
             public HocSinh()

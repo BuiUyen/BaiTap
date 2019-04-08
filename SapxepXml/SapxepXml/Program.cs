@@ -84,7 +84,9 @@ namespace BaiTap2
             if (ThuocTinh == 6)
             {
                 Console.WriteLine("------------------Lua chon thuoc tinh sap xep--------------------");
-                XuatXml1(SapXep(DanhSach1, LuaChon()));
+
+                XuatXml2(SapXep(DanhSach1, LuaChon()));
+
                 Console.WriteLine(" Da xuat file ket qua sap xep !!!");
                 Console.WriteLine("\n------------Close!!!------------");
                 goto end;
