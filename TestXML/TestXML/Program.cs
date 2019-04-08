@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace TestXML
@@ -23,33 +24,53 @@ namespace TestXML
         [XmlElement(ElementName = "HoTen")]
         public string HoTen { get; set; }
         [XmlElement(ElementName = "Tuoi")]
-        public string Tuoi { get; set; }
+        public int Tuoi { get; set; }
+        public string Ten { get; set; }
     }
 
     public class Program
     {
         static void Main()
         {
-            List<HocSinh> DanhSachHocSinh = new List<HocSinh>();
-
             String xmlData = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSachHocSinh.xml");
-            XmlSerializer Danhsach = new XmlSerializer(typeof(LopHS));
+            XmlSerializer DanhsachHocSinh = new XmlSerializer(typeof(LopHS));
             LopHS XmlKetQua = new LopHS();
 
             using (TextReader reader = new StringReader(xmlData))
             {
-                XmlKetQua = (LopHS)Danhsach.Deserialize(reader);               
+                XmlKetQua = (LopHS)DanhsachHocSinh.Deserialize(reader);
             }
 
-            DanhSachHocSinh = XmlKetQua.DanhSachHocSinh;
+            List<HocSinh> a = new List<HocSinh>();
 
+            a = XmlKetQua.DanhSachHocSinh;
             Console.WriteLine("\n\n-------------------Danh sach hoc sinh----------------------------------------");
-            foreach (HocSinh HS in DanhSachHocSinh)
+            foreach (HocSinh HS in a)
             {
                 Console.WriteLine(HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
             }
 
-            Console.WriteLine();
+            // xuat xml
+            // cach 1:
+            string Kqxml = "<?xml version='1.0'?>" + "\n<DanhSachHocSinh>";
+            int i = 0;
+            foreach (HocSinh HS in a)
+            {
+                Kqxml += "\n    <HocSinh>" + "\n         <HoTen>" + a[i].HoTen + "</HoTen>" + "\n         <Tuoi>" + a[i].Tuoi + "</Tuoi>" + "\n         <GioiTinh>" + a[i].HoTen + "</GioiTinh>" + "\n    </HocSinh>";
+                i++;
+            }
+            Kqxml += "\n</DanhSachHocSinh>";
+            Console.WriteLine(Kqxml);
+            File.WriteAllText(@"C:\Users\ADMIN\Desktop\DanhSach.xml", Kqxml);
+
+            // cach 2:
+            XmlSerializer serializer = new XmlSerializer(typeof(LopHS));
+            using (TextWriter textWriter = new StreamWriter(@"C:\Users\ADMIN\Desktop\DanhSach2.xml"))
+            {
+                serializer.Serialize(textWriter, XmlKetQua);
+                textWriter.Close();
+            }
+
             Console.ReadKey();
         }
 

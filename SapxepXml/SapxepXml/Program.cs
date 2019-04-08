@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using Newtonsoft.Json;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace BaiTap2
 {
+    [XmlRoot(ElementName = "DanhSachHocSinh")]
     public class LopHS
     {
-        public int SoLuong { get; set; }
+        [XmlElement(ElementName = "HocSinh")]
         public List<HocSinh> DanhSachHocSinh { get; set; }
     }
+
+    [XmlRoot(ElementName = "HocSinh")]
     public class HocSinh
     {
         public enum Quydoi
@@ -23,10 +26,15 @@ namespace BaiTap2
             Ten = 3,
             GioiTinh = 4
         };
+        [XmlElement(ElementName = "ID")]
         public int ID { get; set; }
+        [XmlElement(ElementName = "HoTen")]
         public string HoTen { get; set; }
+        [XmlElement(ElementName = "Tuoi")]
         public int Tuoi { get; set; }
+        [XmlElement(ElementName = "GioiTinh")]
         public string GioiTinh { get; set; }
+
         public string Ten { get; set; }
 
         public HocSinh()
@@ -46,25 +54,21 @@ namespace BaiTap2
     {
         static void Main()
         {
-            String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json");
+            String xmlData = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.xml");
+            XmlSerializer DanhsachHocSinh = new XmlSerializer(typeof(LopHS));
+            LopHS XmlKetQua = new LopHS();
 
-            LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
-
-            //try
-            //{
-            //    LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
+            using (TextReader reader = new StringReader(xmlData))
+            {
+                XmlKetQua = (LopHS)DanhsachHocSinh.Deserialize(reader);
+            }
 
             List<HocSinh> DanhSach1 = new List<HocSinh>();
             List<HocSinh> DanhSach2 = new List<HocSinh>();
             List<HocSinh> DanhSach3 = new List<HocSinh>();
             List<HocSinh> DanhSach4 = new List<HocSinh>();
             List<HocSinh> DanhSach5 = new List<HocSinh>();
-            foreach (HocSinh HS in List.DanhSachHocSinh)
+            foreach (HocSinh HS in XmlKetQua.DanhSachHocSinh)
             {
                 DanhSach1.Add(HS);
                 DanhSach2.Add(HS);
@@ -72,21 +76,21 @@ namespace BaiTap2
                 DanhSach4.Add(HS);
                 DanhSach5.Add(HS);
             }
-            TachTen(List.DanhSachHocSinh);
-            InDanhSach(List.DanhSachHocSinh);
+            TachTen(XmlKetQua.DanhSachHocSinh);
+            InDanhSach(XmlKetQua.DanhSachHocSinh);
 
         start:
             int ThuocTinh = LuaChon();
             if (ThuocTinh == 6)
             {
-                Console.WriteLine("\n\n------------------Lua chon thuoc tinh sap xep--------------------");
-                XuatJson(SapXep(DanhSach1, LuaChon()));
+                Console.WriteLine("------------------Lua chon thuoc tinh sap xep--------------------");
+                XuatXml1(SapXep(DanhSach1, LuaChon()));
                 Console.WriteLine(" Da xuat file ket qua sap xep !!!");
                 Console.WriteLine("\n------------Close!!!------------");
                 goto end;
             }
 
-            if (ThuocTinh == 7)
+            if ( ThuocTinh == 7 )
             {
                 Console.WriteLine("\n------------Close!!!------------");
                 goto end;
@@ -313,7 +317,7 @@ namespace BaiTap2
             Console.WriteLine("3. Sap xep theo ten.");
             Console.WriteLine("4. Sap xep theo gioi tinh.");
             Console.WriteLine("5. Sap xep theo gioi tinh roi theo ten.");
-            Console.WriteLine("6. Xuat file json.");
+            Console.WriteLine("6. Xuat file xml.");
             Console.WriteLine("7. Thoat.");
             Console.Write("=======>Lua chon:");
             int TT = Convert.ToInt32(Console.ReadLine());
@@ -364,16 +368,32 @@ namespace BaiTap2
             }
             return b;
         }
-
-        //------------------------------------Xuat file json------------------------------------------------------
-        static void XuatJson(List<HocSinh> Input)
+        //------------------------------------Xuat file Xml Cach 1------------------------------------------------------
+        static void XuatXml1(List<HocSinh> Input)
+        {            
+            string Kqxml = "<?xml version='1.0'?>" + "\n<DanhSachHocSinh>";
+            int i = 0;
+            foreach (HocSinh HS in Input)
+            {
+                Kqxml += "\n    <HocSinh>" + "\n         <HoTen>" + Input[i].HoTen + "</HoTen>" + "\n         <Tuoi>" + Input[i].Tuoi + "</Tuoi>" + "\n         <GioiTinh>" + Input[i].HoTen + "</GioiTinh>" + "\n    </HocSinh>";
+                i++;
+            }
+            Kqxml += "\n</DanhSachHocSinh>";
+            Console.WriteLine(Kqxml);
+            File.WriteAllText(@"C:\Users\ADMIN\Desktop\DanhSachKetQua1.xml", Kqxml);
+        }
+        //------------------------------------Xuat file Xml Cach 2------------------------------------------------------
+        static void XuatXml2(List<HocSinh> Input)
         {
-            LopHS XuatDS = new LopHS();
+            LopHS XmlKetQua = new LopHS();
+            XmlKetQua.DanhSachHocSinh = Input;
 
-            XuatDS.SoLuong = 10000;
-            XuatDS.DanhSachHocSinh = Input;
-            string json = JsonConvert.SerializeObject(XuatDS);
-            File.WriteAllText(@"C:\Users\ADMIN\Desktop\DanhSachKetQuaJSON.json", json);
+            XmlSerializer serializer = new XmlSerializer(typeof(LopHS));
+            using (TextWriter textWriter = new StreamWriter(@"C:\Users\ADMIN\Desktop\DanhSachKetQua2.xml"))
+            {
+                serializer.Serialize(textWriter, XmlKetQua);
+                textWriter.Close();
+            }
         }
     }
 }
