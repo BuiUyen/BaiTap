@@ -38,21 +38,20 @@ namespace TestTCP
                 // 2. Nhan du lieu
                 int lc= Convert.ToInt32(reader.ReadLine());
                 string str = reader.ReadLine();
-                while ( reader.Peek()>=0 )
+                while ( reader.Peek() >= 0 )
                 {
                     str += "\n" + reader.ReadLine();
-                }                
+                }
                 // 3. Gui ket qua
-                writer.WriteLine(Sapxep.SX(str, lc));
-                Console.WriteLine(Sapxep.SX(str, lc));
+                string kq = Sapxep.SX(str, lc);
+                writer.WriteLine(kq);
+                Console.WriteLine(kq);
                 break;
             }
             // 4. close
             stream.Close();
             socket.Close();
             listener.Stop();
-
-
             Console.ReadKey();
         }
     }

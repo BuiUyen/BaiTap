@@ -30,7 +30,7 @@ namespace Sent_file_client
             bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
             Console.WriteLine("File: {0} received & saved at path: {1}", fileName, receivedPath);
             bWrite.Close();
-
+                
             clientSock.Close();
             Console.ReadLine();
             Console.ReadKey();
