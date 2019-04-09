@@ -15,13 +15,15 @@ namespace Sent_file_sever
         {
             Console.WriteLine("Waiting to connect:");
             Console.WriteLine("--------------------");
-            IPEndPoint ipEnd = new IPEndPoint(IPAddress.Any, 5656);
+            IPEndPoint ipEnd = new IPEndPoint(IPAddress.Any, 5656);// khoi tao IP client
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
             socket.Bind(ipEnd);
             socket.Listen(10);
+
             Socket client_socket = socket.Accept();
             Console.WriteLine("\n-----Connected--------");
-            string fileName = "test.txt";
+            string fileName = "DanhSachHocSinh.xml";
             string filePath = @"C:\Users\ADMIN\Desktop\";
 
             byte[] fileNameByte = Encoding.ASCII.GetBytes(fileName);
@@ -30,9 +32,9 @@ namespace Sent_file_sever
 
             byte[] clientData = new byte[4 + fileNameByte.Length + fileData.Length];
 
-            byte[] fileNameLen = BitConverter.GetBytes(fileNameByte.Length);
+            byte[] fileNameBit = BitConverter.GetBytes(fileNameByte.Length);
 
-            fileNameLen.CopyTo(clientData, 0);
+            fileNameBit.CopyTo(clientData, 0);
             fileNameByte.CopyTo(clientData, 4);
             fileData.CopyTo(clientData, 4 + fileNameByte.Length);
 
