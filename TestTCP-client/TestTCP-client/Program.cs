@@ -10,6 +10,7 @@ namespace TestTCP_client
 {
     class Program
     {
+        private const int BUFFER_SIZE = 1024;
         private const int PORT_NUMBER = 9999;
         static ASCIIEncoding encoding = new ASCIIEncoding();
 
@@ -31,12 +32,27 @@ namespace TestTCP_client
                 var writer = new StreamWriter(stream);
                 writer.AutoFlush = true;
 
+                //Lua chon thuoc tinh sap xep
+                Console.WriteLine("\n\n-----------------------------------------------");
+                Console.WriteLine("1. Sap xep theo tuoi.");
+                Console.WriteLine("2. Sap xep theo ho ten.");
+                Console.WriteLine("3. Sap xep theo ten.");
+                Console.WriteLine("4. Sap xep theo gioi tinh.");
+                Console.WriteLine("5. Sap xep theo gioi tinh roi theo ten.");
+                Console.Write("\n\nNhap vao thuoc tinh sap xep:");
+                int lc = Convert.ToInt32(Console.ReadLine());
                 // 2. send
+                writer.WriteLine(lc);
                 writer.WriteLine(str);
 
                 // 3. receive
                 string kq = reader.ReadLine();
-                Console.WriteLine(kq);
+                while (reader.Peek() >= 0)
+                {
+                    kq += "\n" + reader.ReadLine();
+                }
+                Console.WriteLine("\n\n" + "Ket qua tra ve: ");
+                Console.WriteLine("\n" + kq);
                 break;
             }
             // 4. close
@@ -45,5 +61,4 @@ namespace TestTCP_client
             Console.ReadKey();
         }
     }
-
 }

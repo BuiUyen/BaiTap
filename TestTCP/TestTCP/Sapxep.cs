@@ -8,12 +8,14 @@ using System.Xml.Serialization;
 
 namespace TestTCP
 {
-    
+    [XmlRoot(ElementName = "DanhSachHocSinh")]
     public class LopHS
-    {        
+    {
+        [XmlElement(ElementName = "HocSinh")]
         public List<HocSinh> DanhSachHocSinh { get; set; }
     }
-    
+
+    [XmlRoot(ElementName = "HocSinh")]
     public class HocSinh
     {
         public enum Quydoi
@@ -24,9 +26,12 @@ namespace TestTCP
             GioiTinh = 4
         };
         
-        public int ID { get; set; }        
-        public string HoTen { get; set; }        
-        public int Tuoi { get; set; }        
+        public int ID { get; set; }
+        [XmlElement(ElementName = "HoTen")]
+        public string HoTen { get; set; }
+        [XmlElement(ElementName = "Tuoi")]
+        public int Tuoi { get; set; }
+        [XmlElement(ElementName = "GioiTinh")]
         public string GioiTinh { get; set; }
         public string Ten { get; set; }
 
@@ -45,8 +50,6 @@ namespace TestTCP
 
     public static class Sapxep
     {
-        private static string strGTT;
-
         public static string SX(string a, int t)
         {
             XmlSerializer DanhsachHocSinh = new XmlSerializer(typeof(LopHS));
@@ -57,24 +60,25 @@ namespace TestTCP
                 LOP_A = (LopHS)DanhsachHocSinh.Deserialize(reader);
             }
             
-            TachTen(LOP_A.DanhSachHocSinh);           
-        
+            TachTen(LOP_A.DanhSachHocSinh);
+
+            string strGTT;        
             int ThuocTinh = t;
             if (ThuocTinh == 5)
             {
-                string strGTT = "";
+                strGTT = "";
                 foreach (HocSinh HS in SapXepGTvaT(LOP_A.DanhSachHocSinh))
                 {
-                    strGTT += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh;
+                    strGTT += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
 
                 }
                 goto end;
             }
 
-            string str = " ";
+            string str = "";
             foreach (HocSinh HS in SapXep(LOP_A.DanhSachHocSinh, ThuocTinh))
             {
-                str += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh;
+                str += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
                 
             }
             return str;

@@ -11,8 +11,8 @@ namespace TestTCP
 {
     public class Program
     {
+        private const int BUFFER_SIZE = 1024;
         private const int PORT = 9999;
-
         static ASCIIEncoding encoding = new ASCIIEncoding();
 
         public static void Main()
@@ -35,13 +35,16 @@ namespace TestTCP
 
             while (true)
             {
-                // 2. Nhan du lieu               
-                string str = reader.ReadToEnd();
-                //Console.WriteLine(Sapxep.SX(str, 3));
-
+                // 2. Nhan du lieu
+                int lc= Convert.ToInt32(reader.ReadLine());
+                string str = reader.ReadLine();
+                while ( reader.Peek()>=0 )
+                {
+                    str += "\n" + reader.ReadLine();
+                }                
                 // 3. Gui ket qua
-                writer.WriteLine(str);
-                Console.WriteLine(str);
+                writer.WriteLine(Sapxep.SX(str, lc));
+                Console.WriteLine(Sapxep.SX(str, lc));
                 break;
             }
             // 4. close
