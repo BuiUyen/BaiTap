@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sent_file_sever
+namespace Sent_file_client
 {
+
     public static class Receive_file
     {
         public static void clientData(byte[] clientData, string receivedPath)
@@ -15,10 +16,11 @@ namespace Sent_file_sever
 
             int fileNameLen = clientData[0];
             string fileName = Encoding.ASCII.GetString(clientData, 1, fileNameLen);
-            BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath + "file.xml", FileMode.Append)); ;
+            BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath + fileName, FileMode.Append)); ;
             bWrite.Write(clientData, 1 + fileNameLen, receivedBytesLen - 1 - fileNameLen);
-            Console.WriteLine("File: {0} received & saved at path: {1}", "file.xml", receivedPath);
+            Console.WriteLine("File: {0} received & saved at path: {1}", fileName, receivedPath);
             bWrite.Close();
         }
     }
+
 }

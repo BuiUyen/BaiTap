@@ -17,28 +17,19 @@ namespace Sent_file_client
         static void Main(string[] args)
         {
             Console.WriteLine("Dang cho nhan tin hieu:");
-            IPAddress[] ipAddress = Dns.GetHostAddresses("192.168.5.95");
+            IPAddress[] ipAddress = Dns.GetHostAddresses("192.168.1.6");
             IPEndPoint ipEnd = new IPEndPoint(ipAddress[0], 5656);
-
             Socket clientSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             clientSock.Connect(ipEnd);
-
-            byte[] clientData = new byte[1024 * 15000];
-            string receivedPath = "C:/";
-            
-            int receivedBytesLen = clientSock.Receive(clientData);//Receive: nhan du lieu byte[] vao clientData, tra ve so byte nhan duoc
-
-            int fileNameLen = clientData[0];
-            string fileName = Encoding.ASCII.GetString(clientData, 1, fileNameLen);
-            Console.WriteLine("Client:{0} connected & File {1} started received.", clientSock.RemoteEndPoint, fileName);
-
-            BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath + fileName, FileMode.Append)); ;
-            bWrite.Write(clientData, 1 + fileNameLen, receivedBytesLen - 1 - fileNameLen);
-            Console.WriteLine("File: {0} received & saved at path: {1}", fileName, receivedPath);
-            bWrite.Close();
-
-            clientSock.Send(Send_file.clientData("DanhSachHocSinh.xml", @"C:\Users\ADMIN\Desktop\"));
-            Console.Write("hoantat");
+            //-------------------Gui file------------------------------
+            string fileName = "DanhSachHocSinh.xml";
+            string filePath = @"C:\Users\";
+            clientSock.Send(Send_file.clientData(fileName, filePath));//gui gile cho serve
+            Console.WriteLine("File:{0} da duoc gui.  ", fileName);
+            //--------------------Nhan file ket qua--------------------
+            byte[] clientData = new byte[1024 * 5000];
+            clientSock.Receive(clientData);
+            Receive_file.clientData(clientData, @"D:\");
 
             clientSock.Close();
             Console.ReadLine();
