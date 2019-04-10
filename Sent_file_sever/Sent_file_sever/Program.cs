@@ -18,7 +18,7 @@ namespace Sent_file_sever
             IPEndPoint ipEnd = new IPEndPoint(IPAddress.Any, 5656);// khoi tao IP client
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
             socket.Bind(ipEnd);
-            socket.Listen(10);
+            socket.Listen(10);//
             Socket client_socket = socket.Accept();
             
             Console.WriteLine("\n-----Connected--------");
