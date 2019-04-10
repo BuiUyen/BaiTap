@@ -46,7 +46,7 @@ namespace TaoXml
             {
                 List<HocSinh> DanhSach = new List<HocSinh>();
 
-                for (int x = 1; x <= 10000; x++)
+                for (int x = 1; x <= 100000; x++)
                 {
                     DanhSach.Add(new HocSinh(x, HoTen_(), Tuoi_(), GioiTinh_()));
                 }
@@ -57,6 +57,7 @@ namespace TaoXml
                 {
                     Kqxml += "\n    <HocSinh>" + "\n         <ID>" + DanhSach[i].ID + "</ID>" + "\n         <HoTen>" + DanhSach[i].HoTen + "</HoTen>" + "\n         <Tuoi>" + DanhSach[i].Tuoi + "</Tuoi>" + "\n         <GioiTinh>" + DanhSach[i].GioiTinh + "</GioiTinh>" + "\n    </HocSinh>";
                     i++;
+                    Console.WriteLine(i);
                 }
                 Kqxml += "\n</DanhSachHocSinh>";
                 Console.WriteLine(Kqxml);
