@@ -27,8 +27,7 @@ namespace Sent_file_sever
             
 
             
-            client_socket.Send(Send_file.clientData(fileName, filePath));
-
+            client_socket.Send(Send_file.clientData(fileName, filePath));//gui gile
             Console.WriteLine("File:{0} da duoc gui.", fileName);
 
             byte[] clientData = new byte[1024 * 15000];
