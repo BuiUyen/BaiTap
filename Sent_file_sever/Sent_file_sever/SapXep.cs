@@ -69,7 +69,7 @@ namespace Sent_file_sever
                 strGTT = "";
                 foreach (HocSinh HS in SapXepGTvaT(LOP_A.DanhSachHocSinh))
                 {
-                    strGTT += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
+                    strGTT += "\n\n  " + HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
 
                 }
                 goto end;
@@ -78,7 +78,7 @@ namespace Sent_file_sever
             string str = "";
             foreach (HocSinh HS in SapXep(LOP_A.DanhSachHocSinh, ThuocTinh))
             {
-                str += HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
+                str += "\n\n  " + HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + "\n";
 
             }
             return str;

@@ -9,14 +9,24 @@ namespace Sent_file_sever
 {
     public static class Receive_file
     {
-        public static void clientData(byte[] clientData, string receivedPath)
-        {
-            int receivedBytesLen = clientData.Count();
-
+        public static void clientData(byte[] inputData, string receivedPath)
+        {            
+            List<byte> Tg = new List<byte>();
+            foreach (byte i in inputData)
+            {
+                if (i == 0)
+                {
+                    break;
+                }
+                Tg.Add(i);
+            }// Cat bo byte rong trong mang dau vao
+            byte[] clientData = Tg.ToArray();
+            int lenght = clientData.Count();
             int fileNameLen = clientData[0];
+
             string fileName = Encoding.ASCII.GetString(clientData, 1, fileNameLen);
-            BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath + "file.xml", FileMode.Append)); ;
-            bWrite.Write(clientData, 1 + fileNameLen, receivedBytesLen - 1 - fileNameLen);
+            BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath + "file.xml", FileMode.Append));
+            bWrite.Write(clientData, 1 + fileNameLen, lenght - 1 - fileNameLen);
             Console.WriteLine("File: {0} received & saved at path: {1}", "file.xml", receivedPath);
             bWrite.Close();
         }
