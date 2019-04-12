@@ -143,13 +143,15 @@ namespace GiaiMa_ok
         public static void thuchien(string madauvao, List<char> input, string ten)
         {
             if (chartostr(input, 2) == madauvao)
-            {
-                Console.Write("\n{0} : ", ten);
+            {                
                 input.RemoveRange(0, 2);
-                int lenght = Convert.ToInt32(chartostr(input, 2));
+                string strlenght = chartostr(input, 2);
+                int lenght = Convert.ToInt32(strlenght);
                 input.RemoveRange(0, 2);
                 string a = chartostr(input, lenght);
+                //Console.WriteLine("\n {0} {1} {2}", madauvao, strlenght, a); 
                 input.RemoveRange(0, lenght);
+                Console.Write("{0} : ", ten);
                 Console.WriteLine(a);
             }
             else Console.WriteLine("Error!!! {0} !!!", ten);
