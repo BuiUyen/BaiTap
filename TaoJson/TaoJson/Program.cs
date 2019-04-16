@@ -41,7 +41,7 @@ namespace TaoJson
         {
             List<HocSinh> DanhSach = new List<HocSinh>();
 
-            for (int i = 1; i <= 10000; i++)
+            for (int i = 1; i <= 100; i++)
             {
                 DanhSach.Add(new HocSinh(i, HoTen_(), Tuoi_(), GioiTinh_()));
             }
