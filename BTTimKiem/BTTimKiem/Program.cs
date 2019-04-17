@@ -57,14 +57,13 @@ namespace BTTimKiem
             Console.WriteLine("...");
             Console.WriteLine(List[List.Count - 1].ID + "." + List[List.Count - 1].HoTen + " ....... " + List[List.Count - 1].Tuoi + " ....... " + List[List.Count - 1].GioiTinh);
             Console.WriteLine("\n=> Danh Sách Có {0} Học Sinh.", List.Count);
-
             Console.WriteLine("\n- - - Chương trình tìm kiếm - - -" +
                "\n* Tìm kiếm theo tên hoặc tuổi: " +
                "\n-) Có thể nhập vào một tên." +
                "\n-) Có thể nhập vào một số tuổi." +
                "\n-) Có thể nhập vào > , >= , < , <= kèm theo số tuổi để tìm kiếm." +
                "\n-) Có thể nhập vào cấu trúc 'a - b' để tìm kiếm HS trong khoảng tuổi từ a đến b.");
-
+            //Thuat toan chinh
             Thuc_hien(List);
             Console.ReadKey();
         }
@@ -122,6 +121,11 @@ namespace BTTimKiem
                     }
                 }
                 while (yn != "y");                
+            }
+
+            if (Output.Count == 1)
+            {
+                Console.WriteLine("\n===>Đã ra kết quả cần tìm.");
             }
 
             if (Output.Count == 0)
@@ -282,7 +286,8 @@ namespace BTTimKiem
 
         static void InDanhSach(List<HocSinh> Input)
         {
-            if (Input.Count == 0)
+            int IC = Input.Count();
+            if (IC == 0)
             {
                 Console.WriteLine("\n!!!Không có giá trị cần tìm!!!");
                 Console.WriteLine("-----------------------------------");
@@ -290,7 +295,7 @@ namespace BTTimKiem
             else
             {
                 Console.WriteLine("\n-------------------Danh Sách Học Sinh--------------------------------------");
-                if (Input.Count > 8)
+                if (IC > 8)
                 {
                     for (int i = 0; i < 8; i++)
                     {
@@ -299,8 +304,11 @@ namespace BTTimKiem
                     Console.WriteLine("...");
                     Console.WriteLine("...");
                     Console.WriteLine("...");
-                    Console.WriteLine(Input[Input.Count - 1].ID + "." + Input[Input.Count - 1].HoTen + " ....... " + Input[Input.Count - 1].Tuoi + " ....... " + Input[Input.Count - 1].GioiTinh);
-                    Console.WriteLine("\n=> Có {0} kết quả cần tìm.", Input.Count);
+                    Console.WriteLine(Input[IC - 1].ID + "." + Input[IC - 1].HoTen + " ....... " + Input[IC - 1].Tuoi + " ....... " + Input[IC - 1].GioiTinh);
+                    Console.Write("\n=> Có {0} kết quả cần tìm.", Input.Count);
+                    Console.WriteLine(" Nhấm phím 'Ctrl' để in đầy đủ danh sách.");
+                    var phim = Console.ReadKey();
+                    if(phim == 'Ctrl')
                 }
                 else
                 {
@@ -308,7 +316,7 @@ namespace BTTimKiem
                     {
                         Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
                     }
-                    Console.WriteLine("\n=> Có {0} kết quả cần tìm.", Input.Count);
+                    Console.WriteLine("\n=> Có {0} kết quả cần tìm.", IC);
                 }
             }
         }
