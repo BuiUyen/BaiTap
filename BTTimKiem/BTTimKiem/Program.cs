@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +32,10 @@ namespace BTTimKiem
             GioiTinh = gioitinh;
         }
     }
+    public class Ten
+    {
+        public List<string> Name = new List<string>();
+    }
 
     class BT
     {
@@ -40,43 +44,89 @@ namespace BTTimKiem
             String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json");
             LopHS mLopHS = JsonConvert.DeserializeObject<LopHS>(json_data);
             List<HocSinh> List = mLopHS.DanhSachHocSinh;
+            Console.OutputEncoding = Encoding.UTF8;
             TachTen(List);
-            foreach (HocSinh HS in List)
+            //In ra danh sach hoc sinh
+            Console.WriteLine("----------Danh Sách Học Sinh Ban Đầu------------");
+            for (int i = 0; i < 8; i++)
             {
-                Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
+                Console.WriteLine(List[i].ID + "." + List[i].HoTen + " ....... " + List[i].Tuoi + " ....... " + List[i].GioiTinh);
             }
-            Thuc_hien(List);
-            //InDanhSach(Nhi_Phan(List, 20));
+            Console.WriteLine("...");
+            Console.WriteLine("...");
+            Console.WriteLine("...");
+            Console.WriteLine(List[List.Count - 1].ID + "." + List[List.Count - 1].HoTen + " ....... " + List[List.Count - 1].Tuoi + " ....... " + List[List.Count - 1].GioiTinh);
+            Console.WriteLine("\n=> Danh Sách Có {0} Học Sinh.", List.Count);
 
+            Console.WriteLine("\n- - - Chương trình tìm kiếm - - -" +
+               "\n* Tìm kiếm theo tên hoặc tuổi: " +
+               "\n-) Có thể nhập vào một tên." +
+               "\n-) Có thể nhập vào một số tuổi." +
+               "\n-) Có thể nhập vào > , >= , < , <= kèm theo số tuổi để tìm kiếm." +
+               "\n-) Có thể nhập vào cấu trúc 'a - b' để tìm kiếm HS trong khoảng tuổi từ a đến b.");
+
+            Thuc_hien(List);
             Console.ReadKey();
         }
 
         static void Thuc_hien(List<HocSinh> Input)
         {
             List<HocSinh> Output = new List<HocSinh>();
-            Console.WriteLine("\nNhap vao gia tri tim kiem:");
+            Console.Write("\nNhập vào giá trị tìm kiếm: ");
             string str = Console.ReadLine();
-
             foreach (char i in str)
             {
-                if (!Char.IsLetterOrDigit(i))
+                if (!Char.IsLetterOrDigit(i) || str.Contains("-"))
                 {
-                    Output = STuoi2(Input, str);                    
+                    Output = STuoi2(Input, str);
+                    break;
                 }
-            }
-
-            if (Int32.TryParse(str, out int t))
-            {
-                Output = STuoi1(Input, t);
-            }
-            else
-            {
-                Output = SName(Input, str);
+                else
+                {
+                    if (Int32.TryParse(str, out int t))
+                    {
+                        Output = STuoi1(Input, t);
+                        break;
+                    }
+                    else
+                    {
+                        Ten T = new Ten();
+                        mTen(Input, T);
+                        Output = SName(Input, T, str);
+                        break;
+                    }
+                }
             }
 
             if (Output.Count > 1)
             {
-                Thuc_hien(Output);
+                Console.Write("\nBạn muốn tiếp tục tìm kiếm trong danh sách trên: (y/n)?  ");
+                string yn = Console.ReadLine().ToLower();
+                do
+                {
+                    if (yn != "y")
+                    {
+                        if (yn == "n")
+                        {
+                            Console.WriteLine("Kết thúc chương trình.");
+                            break;
+                        }
+                        Console.WriteLine("!!!Bạn nhập chưa đúng!!! ");
+                        Console.Write("\nBạn muốn tiếp tục tìm kiếm trong danh sách trên: (y/n)?  ");
+                        yn = Console.ReadLine().ToLower();
+                    }
+
+                    if (yn == "y")
+                    {
+                        Thuc_hien(Output);
+                    }
+                }
+                while (yn != "y");                
+            }
+
+            if (Output.Count == 0)
+            {
+                Thuc_hien(Input);
             }
         }
 
@@ -89,9 +139,22 @@ namespace BTTimKiem
             }
         }
 
+        static void mTen(List<HocSinh> Input, Ten T)
+        {
+            foreach (HocSinh HS in Input)
+            {
+                if (!T.Name.Contains(HS.Ten.ToLower()))
+                {
+                    T.Name.Add(HS.Ten.ToLower());
+                }
+
+            }
+        }
+
         static List<HocSinh> STuoi1(List<HocSinh> Input, int tuoi)//Tim mot gi tri tuoi
         {
             List<HocSinh> Output = new List<HocSinh>();
+            Console.WriteLine("\n=> Bạn muốn tìm các HS có tuổi là {0}", tuoi);
             foreach (HocSinh HS in Input)
             {
                 if (HS.Tuoi == tuoi)
@@ -107,68 +170,112 @@ namespace BTTimKiem
         {
             List<HocSinh> Output = new List<HocSinh>();
             var char_array = str.ToCharArray();
+
             if (char_array[0] == '>')
             {
-                int b = Convert.ToInt32(str.Remove(0, 1));
-                foreach (HocSinh HS in Input)
+                if (char_array[1] == '=')
                 {
-                    if (HS.Tuoi > b)
-                    {
-                        Output.Add(HS);
-                    }
-                }
-            }
-
-            if (char_array[0] == '<')
-            {
-                int a = Convert.ToInt32(str.Remove(0, 1));
-                foreach (HocSinh HS in Input)
-                {
-                    if (HS.Tuoi < a)
-                    {
-                        Output.Add(HS);
-                    }
-                }
-            }
-
-            if (Array.IndexOf(char_array, '-') > 0)
-            {
-                {
-                    int char_ = Array.IndexOf(char_array, '-');
-                    int a = (Convert.ToInt32(str.Substring(0, char_)));
-                    int b = (Convert.ToInt32(str.Substring(char_ + 1, str.Length - char_ - 1)));
-                    if (b < a)
-                    {
-                        int tg = b;
-                        b = a;
-                        a = tg;
-                    }
-
+                    int a = Convert.ToInt32(str.Remove(0, 2));
+                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn hoặc bằng {0}.", a);
                     foreach (HocSinh HS in Input)
                     {
-                        if (a <= HS.Tuoi & HS.Tuoi <= b)
+                        if (HS.Tuoi >= a)
+                        {
+                            Output.Add(HS);
+                        }
+                    }
+                }
+                else
+                {
+                    int a = Convert.ToInt32(str.Remove(0, 1));
+                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn {0}.", a);
+                    foreach (HocSinh HS in Input)
+                    {
+                        if (HS.Tuoi > a)
                         {
                             Output.Add(HS);
                         }
                     }
                 }
             }
-    
+
+            if (char_array[0] == '<')
+            {
+                if (char_array[1] == '=')
+                {
+                    int a = Convert.ToInt32(str.Remove(0, 2));
+                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn hoặc bằng {0}.", a);
+                    foreach (HocSinh HS in Input)
+                    {
+                        if (HS.Tuoi <= a)
+                        {
+                            Output.Add(HS);
+                        }
+                    }
+                }
+                else
+                {
+                    int a = Convert.ToInt32(str.Remove(0, 1));
+                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn {0}.", a);
+                    foreach (HocSinh HS in Input)
+                    {
+                        if (HS.Tuoi < a)
+                        {
+                            Output.Add(HS);
+                        }
+                    }
+                }
+            }
+
+            if (str.Contains("-"))
+            {
+                int char_ = Array.IndexOf(char_array, '-');
+                int a = (Convert.ToInt32(str.Substring(0, char_)));
+                int b = (Convert.ToInt32(str.Substring(char_ + 1, str.Length - char_ - 1)));
+                if (b < a)
+                {
+                    int tg = b;
+                    b = a;
+                    a = tg;
+                }
+                Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi từ: {0} đến {1}.", a, b);
+                foreach (HocSinh HS in Input)
+                {
+                    if (a <= HS.Tuoi && HS.Tuoi <= b)
+                    {
+                        Output.Add(HS);
+                    }
+                }
+            }
+
             InDanhSach(Output);
             return Output;
         }
 
-        static List<HocSinh> SName(List<HocSinh> Input, string a)//Tim ten co chua thanh phan tim kiem
+        static List<HocSinh> SName(List<HocSinh> Input, Ten T, string a)//Tim ten co chua thanh phan tim kiem
         {
             List<HocSinh> Output = new List<HocSinh>();
-            foreach (HocSinh HS in Input)
+            if (T.Name.Contains(a.ToLower()))
             {
-                string test = HS.HoTen;
-                if (test.ToLower().Contains(a.ToLower()))
+                foreach (HocSinh HS in Input)
                 {
-                    Output.Add(HS);
+                    if (HS.Ten.ToLower()==a.ToLower())
+                    {
+                        Output.Add(HS);
+                    }
                 }
             }
+            else
+            {
+                foreach (HocSinh HS in Input)
+                {
+                    if (HS.HoTen.ToLower().Contains(a.ToLower()))
+                    {
+                        Output.Add(HS);
+                    }
+                }
+            }
+
             InDanhSach(Output);
             return Output;
         }
@@ -177,18 +284,23 @@ namespace BTTimKiem
         {
             if (Input.Count == 0)
             {
-                Console.WriteLine("\n=>Khong co gia tri can tim!!!");                
+                Console.WriteLine("\n!!!Không có giá trị cần tìm!!!");
+                Console.WriteLine("-----------------------------------");
             }
             else
             {
-                Console.WriteLine("\n\n-------------------Ket Qua----------------------------------------");
-                if (Input.Count > 5)
+                Console.WriteLine("\n-------------------Danh Sách Học Sinh--------------------------------------");
+                if (Input.Count > 8)
                 {
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 8; i++)
                     {
                         Console.WriteLine(Input[i].ID + "." + Input[i].HoTen + " ....... " + Input[i].Tuoi + " ....... " + Input[i].GioiTinh);
                     }
                     Console.WriteLine("...");
+                    Console.WriteLine("...");
+                    Console.WriteLine("...");
+                    Console.WriteLine(Input[Input.Count - 1].ID + "." + Input[Input.Count - 1].HoTen + " ....... " + Input[Input.Count - 1].Tuoi + " ....... " + Input[Input.Count - 1].GioiTinh);
+                    Console.WriteLine("\n=> Có {0} kết quả cần tìm.", Input.Count);
                 }
                 else
                 {
@@ -196,39 +308,11 @@ namespace BTTimKiem
                     {
                         Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
                     }
+                    Console.WriteLine("\n=> Có {0} kết quả cần tìm.", Input.Count);
                 }
             }
         }
 
-        static List<HocSinh> Nhi_Phan(List<HocSinh> Input, int tuoi)
-        {
-            List<HocSinh> List = new List<HocSinh>();
-            foreach(HocSinh HS in List)
-            {
-                List.Add(HS);
-            }
-            int minNum = 0;
-            int maxNum = List.Count - 1;
-            List<HocSinh> Output = new List<HocSinh>();
-            
-            while (minNum <= maxNum)
-            {
-                int mid = (minNum + maxNum) / 2;
-                if (tuoi == List[mid].Tuoi)
-                {
-                    Output.Add(List[mid]);
-                    List.Remove(List[mid]);
-                }
-                else if (tuoi < List[mid].Tuoi)
-                {
-                    maxNum = mid - 1;
-                }
-                else
-                {
-                    minNum = mid + 1;
-                }
-            }
-            return Output;
-        }
+
     }
 }
