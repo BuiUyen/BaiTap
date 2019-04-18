@@ -52,7 +52,7 @@ namespace BTTimKiem
             {
                 Console.WriteLine(List[i].ID + "." + List[i].HoTen + " ....... " + List[i].Tuoi + " ....... " + List[i].GioiTinh);
             }
-            Console.WriteLine("...");            
+            Console.WriteLine("...");
             Console.WriteLine(List[List.Count - 1].ID + "." + List[List.Count - 1].HoTen + " ....... " + List[List.Count - 1].Tuoi + " ....... " + List[List.Count - 1].GioiTinh);
             Console.WriteLine("\n=> Danh Sách Có {0} Học Sinh.", List.Count);
             Console.WriteLine("\n- - - Chương trình tìm kiếm - - -" +
@@ -95,18 +95,13 @@ namespace BTTimKiem
                         {
                             Console.Write("Bạn muốn tìm: \n +)HS có giới tính {0} (Nhấn phím A). \n +)HS tên '{1}'(Nhấn phím bất kì trong các phím còn lại):  ", str.ToLower(), str);
                             var key = Console.ReadKey().Key;
-                            if ( key == ConsoleKey.A)
+                            if (key == ConsoleKey.A)
                             {
                                 Console.WriteLine("\n=>Tìm kiếm HS có giới tính : " + str.ToLower());
                                 Output = SGioiTinh(Input, str.ToLower());
                                 break;
-                            }
-                            else
-                            {
-                                Console.WriteLine("\n=>Tìm kiếm HS có tên : " + str.ToLower());
-                            }
-                        }
-                        Console.WriteLine("\n=>Tìm kiếm HS có tên : " + str);
+                            }                            
+                        }                        
                         Output = SName(Input, T, str);
                         break;
                     }
@@ -168,7 +163,6 @@ namespace BTTimKiem
                 {
                     T.Name.Add(HS.Ten.ToLower());
                 }
-
             }
         }
 
@@ -176,13 +170,10 @@ namespace BTTimKiem
         {
             List<HocSinh> Output = new List<HocSinh>();
             Console.WriteLine("\n=> Bạn muốn tìm các HS có tuổi là {0}", tuoi);
-            foreach (HocSinh HS in Input)
+            Output = Input.FindAll(delegate (HocSinh HS)
             {
-                if (HS.Tuoi == tuoi)
-                {
-                    Output.Add(HS);
-                }
-            }
+                return HS.Tuoi == tuoi;
+            });
             InDanhSach(Output);
             return Output;
         }
@@ -190,83 +181,61 @@ namespace BTTimKiem
         static List<HocSinh> STuoi2(List<HocSinh> Input, string str)//Tim khoang gi tri tuoi
         {
             List<HocSinh> Output = new List<HocSinh>();
-            var char_array = str.ToCharArray();
-
-            if (char_array[0] == '>')
+            
+            if ( str.Contains(">="))
             {
-                if (char_array[1] == '=')
+                str = str.Replace(">=", "");
+                int Tuoi = Int32.Parse(str);
+                Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn hoặc bằng {0}.", Tuoi);
+                Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    int a = Convert.ToInt32(str.Remove(0, 2));
-                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn hoặc bằng {0}.", a);
-                    foreach (HocSinh HS in Input)
-                    {
-                        if (HS.Tuoi >= a)
-                        {
-                            Output.Add(HS);
-                        }
-                    }
-                }
-                else
-                {
-                    int a = Convert.ToInt32(str.Remove(0, 1));
-                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn {0}.", a);
-                    foreach (HocSinh HS in Input)
-                    {
-                        if (HS.Tuoi > a)
-                        {
-                            Output.Add(HS);
-                        }
-                    }
-                }
+                    return HS.Tuoi >= Tuoi;
+                });
             }
 
-            if (char_array[0] == '<')
+            if (str.Contains(">"))
             {
-                if (char_array[1] == '=')
+                str = str.Replace(">", "");
+                int Tuoi = Int32.Parse(str);
+                Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi lớn hơn {0}.", Tuoi);
+                Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    int a = Convert.ToInt32(str.Remove(0, 2));
-                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn hoặc bằng {0}.", a);
-                    foreach (HocSinh HS in Input)
-                    {
-                        if (HS.Tuoi <= a)
-                        {
-                            Output.Add(HS);
-                        }
-                    }
-                }
-                else
-                {
-                    int a = Convert.ToInt32(str.Remove(0, 1));
-                    Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn {0}.", a);
-                    foreach (HocSinh HS in Input)
-                    {
-                        if (HS.Tuoi < a)
-                        {
-                            Output.Add(HS);
-                        }
-                    }
-                }
+                    return HS.Tuoi > Tuoi;
+                });
             }
 
+            if (str.Contains("<="))
+            {
+                str = str.Replace("<=", "");
+                int Tuoi = Int32.Parse(str);
+                Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn hoặc bằng {0}.", Tuoi);
+                Output = Input.FindAll(delegate (HocSinh HS)
+                {
+                    return HS.Tuoi <= Tuoi;
+                });
+            }
+
+            if (str.Contains("<"))
+            {
+                str =str.Replace("<", "");
+                int Tuoi = Int32.Parse(str);
+                Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn {0}.", Tuoi);
+                Output = Input.FindAll(delegate (HocSinh HS)
+                {
+                    return HS.Tuoi < Tuoi;
+                });
+            }
+                        
             if (str.Contains("-"))
             {
-                int char_ = Array.IndexOf(char_array, '-');
-                int a = (Convert.ToInt32(str.Substring(0, char_)));
-                int b = (Convert.ToInt32(str.Substring(char_ + 1, str.Length - char_ - 1)));
-                if (b < a)
-                {
-                    int tg = b;
-                    b = a;
-                    a = tg;
-                }
+                string[] arr = str.Split('-');
+                int a = Int32.Parse(arr[0]);
+                int b = Int32.Parse(arr[1]);                
                 Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi từ: {0} đến {1}.", a, b);
-                foreach (HocSinh HS in Input)
+                Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    if (a <= HS.Tuoi && HS.Tuoi <= b)
-                    {
-                        Output.Add(HS);
-                    }
-                }
+                    return (HS.Tuoi <=b && a <= HS.Tuoi);
+                });
             }
 
             InDanhSach(Output);
@@ -278,30 +247,26 @@ namespace BTTimKiem
             List<HocSinh> Output = new List<HocSinh>();
             if (T.Name.Contains(str.ToLower()))
             {
-                foreach (HocSinh HS in Input)
+                Console.WriteLine("\n=>Tìm kiếm HS có tên : " + str);
+                Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    if (HS.Ten.ToLower() == str.ToLower())
-                    {
-                        Output.Add(HS);
-                    }
-                }
+                    return HS.Ten.ToLower() == str.ToLower();
+                });
             }
             else
             {
-                foreach (HocSinh HS in Input)
+                Console.WriteLine("\n=>Tìm kiếm HS có tên chứa chuỗi kí tự: " + str);
+                Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    if (HS.HoTen.ToLower().Contains(str.ToLower()))
-                    {
-                        Output.Add(HS);
-                    }
-                }
+                    return HS.HoTen.ToLower().Contains(str.ToLower());
+                });
             }
             InDanhSach(Output);
             return Output;
         }
 
         static List<HocSinh> SGioiTinh(List<HocSinh> Input, string str)
-        {            
+        {
             List<HocSinh> Output = new List<HocSinh>();
             foreach (HocSinh HS in Input)
             {
@@ -331,7 +296,7 @@ namespace BTTimKiem
                     {
                         Console.WriteLine(Input[i].ID + "." + Input[i].HoTen + " ....... " + Input[i].Tuoi + " ....... " + Input[i].GioiTinh);
                     }
-                    Console.WriteLine("...");                    
+                    Console.WriteLine("...");
                     Console.WriteLine(Input[IC - 1].ID + "." + Input[IC - 1].HoTen + " ....... " + Input[IC - 1].Tuoi + " ....... " + Input[IC - 1].GioiTinh);
                     Console.Write("\n=> Có {0} kết quả cần tìm.", Input.Count);
                     Console.WriteLine(" Nhấm phím 'F1' để in đầy đủ danh sách.");
