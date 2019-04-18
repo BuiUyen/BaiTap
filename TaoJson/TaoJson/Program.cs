@@ -66,13 +66,13 @@ namespace TaoJson
         static string HoTen_()
         {
             string HoTen;
-            List<string> ListHo = new List<string> { "Nguyen", "Tran", "Le", "Pham", "Huynh", "Phan", "Vu", "Dang", "Bui", "Do", "Ho", "Ngo", "Duong", "Ly" };
+            List<string> ListHo = new List<string> { "Nu", "Nguyen", "Tran", "Le", "Pham", "Huynh", "Phan", "Vu", "Dang", "Bui", "Do", "Ho", "Ngo", "Duong", "Ly" };
             int h = rnd.Next(ListHo.Count);
 
             List<string> ListDem = new List<string> { "Van", "Ba", "Manh", "Thi", "Dieu", "Duc", "Mau", "Xuan", "Thu", "Cam", "Chau", "Hong", "Hoang", "Hanh", "Dinh", "Dai", "Tien" };
             int d = rnd.Next(ListDem.Count);
 
-            List<string> ListTen = new List<string> { "An", "Anh", "Bang", "Bao", "Han", "Hieu", "Huy", "Khoa", "Kiet", "Lam", "Linh", "My", "Ngoc", "Nhi", "Oanh", "Quang", "Quyen", "Tam", "Thuy", "Tram", "Tung", "Vy", "Uyen", "Trang" };
+            List<string> ListTen = new List<string> { "Nam", "An", "Anh", "Bang", "Bao", "Han", "Hieu", "Huy", "Khoa", "Kiet", "Lam", "Linh", "My", "Ngoc", "Nhi", "Oanh", "Quang", "Quyen", "Tam", "Thuy", "Tram", "Tung", "Vy", "Uyen", "Trang" };
             int t = rnd.Next(ListTen.Count);
 
             HoTen = ListHo[h] + " " + ListDem[d] + " " + ListTen[t];
