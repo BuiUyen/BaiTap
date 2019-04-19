@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,25 +14,42 @@ namespace BTTimKiem
         public int SoLuong { get; set; }
         public List<HocSinh> DanhSachHocSinh { get; set; }
     }
+
     public class HocSinh
     {
         public int ID { get; set; }
         public string HoTen { get; set; }
+        public string Ten { get; set; }
         public int Tuoi { get; set; }
         public string GioiTinh { get; set; }
-        public string Ten { get; set; }
+        public DateTime NamSinh { get; set; }
+        public string HanhKiem { get; set; }
+        public Diem mDiem { get; set; }
+
         public HocSinh()
         {
 
         }
-        public HocSinh(int id, String hoten, int tuoi, string gioitinh)
+        public HocSinh(int id, String hoten, int tuoi, string gioitinh, DateTime namsinh, string hanhkiem, Diem diem)
         {
             ID = id;
             HoTen = hoten;
             Tuoi = tuoi;
             GioiTinh = gioitinh;
+            NamSinh = namsinh;
+            mDiem = diem;
+            HanhKiem = hanhkiem;
         }
     }
+
+    public class Diem
+    {
+        public int DiemToan { get; set; }
+        public int DiemVan { get; set; }
+        public int DiemLi { get; set; }
+        public int DiemHoa { get; set; }
+    }
+
     public class Ten
     {
         public List<string> Name = new List<string>();
@@ -44,24 +62,27 @@ namespace BTTimKiem
             String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSach.json");
             LopHS mLopHS = JsonConvert.DeserializeObject<LopHS>(json_data);
             List<HocSinh> List = mLopHS.DanhSachHocSinh;
-            Console.OutputEncoding = Encoding.UTF8;
-            TachTen(List);
-            //In ra danh sach hoc sinh
+            Console.OutputEncoding = Encoding.UTF8;//in ra tiếng việt
+            CultureInfo viVn = new CultureInfo("vi-VN");//in ra datetime với văn hóa việt nam
+            TachTen(List);//Tách tên từ họ tên
+
             Console.WriteLine("----------Danh Sách Học Sinh Ban Đầu------------");
             for (int i = 0; i < 8; i++)
             {
-                Console.WriteLine(List[i].ID + "." + List[i].HoTen + " ....... " + List[i].Tuoi + " ....... " + List[i].GioiTinh);
+                Console.WriteLine(List[i].ID + "." + List[i].HoTen + " ....... " + List[i].Tuoi + " ....... " + List[i].GioiTinh + " ....... " + List[i].NamSinh.ToString("d", viVn));
             }
             Console.WriteLine("...");
-            Console.WriteLine(List[List.Count - 1].ID + "." + List[List.Count - 1].HoTen + " ....... " + List[List.Count - 1].Tuoi + " ....... " + List[List.Count - 1].GioiTinh);
+            Console.WriteLine(List[List.Count - 1].ID + "." + List[List.Count - 1].HoTen + " ....... " + List[List.Count - 1].Tuoi + " ....... " + List[List.Count - 1].GioiTinh + " ....... " + List[List.Count - 1].NamSinh.ToString("d", viVn));
             Console.WriteLine("\n=> Danh Sách Có {0} Học Sinh.", List.Count);
             Console.WriteLine("\n- - - Chương trình tìm kiếm - - -" +
-               "\n* Tìm kiếm theo tên hoặc tuổi: " +
+               "\n* Tìm kiếm theo theo các thuộc tính sau đây: " +
                "\n-) Có thể nhập vào một tên." +
                "\n-) Có thể nhập vào một số tuổi." +
                "\n-) Có thể nhập vào > , >= , < , <= kèm theo số tuổi để tìm kiếm." +
                "\n-) Có thể nhập vào cấu trúc 'a - b' để tìm kiếm HS trong khoảng tuổi từ a đến b." +
-               "\n-) Cos thể nhập vào giới tính.");
+               "\n-) Có thể nhập vào giới tính(nam hoặc nữ)" +
+               "\n-) Có thể nhập vào ngày tháng năm sinh(dd/mm/yy với dd: ngày, mm: tháng, yy:năm)");
+
             //Thuat toan chinh
             Thuc_hien(List);
             Console.ReadKey();
@@ -74,6 +95,22 @@ namespace BTTimKiem
             string str = Console.ReadLine();
             foreach (char i in str)
             {
+                if (str.Contains("/"))
+                {
+                    DateTime namsinh;
+                    try
+                    {
+                        namsinh = DateTime.ParseExact(str, "dd/MM/yyyy", null);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("\n!!!Định dạng ngày tháng năm không đúng!!!");
+                        break;
+                    }
+                    Output = SNamSinh(Input, namsinh);
+                    break;
+                }
+
                 if (!Char.IsLetterOrDigit(i) || str.Contains("-"))
                 {
                     Output = STuoi2(Input, str);
@@ -100,8 +137,8 @@ namespace BTTimKiem
                                 Console.WriteLine("\n=>Tìm kiếm HS có giới tính : " + str.ToLower());
                                 Output = SGioiTinh(Input, str.ToLower());
                                 break;
-                            }                            
-                        }                        
+                            }
+                        }
                         Output = SName(Input, T, str);
                         break;
                     }
@@ -141,7 +178,7 @@ namespace BTTimKiem
 
             if (Output.Count == 0)
             {
-                Console.WriteLine("Thực hiện lại tìm kiếm với danh sách ban đầu.");
+                Console.WriteLine("\n\n=>Thực hiện lại tìm kiếm với danh sách ban đầu.");
                 Thuc_hien(Input);
             }
         }
@@ -181,8 +218,8 @@ namespace BTTimKiem
         static List<HocSinh> STuoi2(List<HocSinh> Input, string str)//Tim khoang gi tri tuoi
         {
             List<HocSinh> Output = new List<HocSinh>();
-            
-            if ( str.Contains(">="))
+
+            if (str.Contains(">="))
             {
                 str = str.Replace(">=", "");
                 int Tuoi = Int32.Parse(str);
@@ -217,7 +254,7 @@ namespace BTTimKiem
 
             if (str.Contains("<"))
             {
-                str =str.Replace("<", "");
+                str = str.Replace("<", "");
                 int Tuoi = Int32.Parse(str);
                 Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi nhỏ hơn {0}.", Tuoi);
                 Output = Input.FindAll(delegate (HocSinh HS)
@@ -225,16 +262,16 @@ namespace BTTimKiem
                     return HS.Tuoi < Tuoi;
                 });
             }
-                        
+
             if (str.Contains("-"))
             {
                 string[] arr = str.Split('-');
                 int a = Int32.Parse(arr[0]);
-                int b = Int32.Parse(arr[1]);                
+                int b = Int32.Parse(arr[1]);
                 Console.WriteLine("\n=> Bạn muốn tìm các HS có độ tuổi từ: {0} đến {1}.", a, b);
                 Output = Input.FindAll(delegate (HocSinh HS)
                 {
-                    return (HS.Tuoi <=b && a <= HS.Tuoi);
+                    return (HS.Tuoi <= b && a <= HS.Tuoi);
                 });
             }
 
@@ -265,6 +302,19 @@ namespace BTTimKiem
             return Output;
         }
 
+        static List<HocSinh> SNamSinh(List<HocSinh> Input, DateTime NamSinh)//Tìm học sinh có ngay thang nam sinh da nhap
+        {
+            List<HocSinh> Output = new List<HocSinh>();
+            CultureInfo viVn = new CultureInfo("vi-VN");
+            Console.WriteLine("\n=> Bạn muốn tìm các HS có ngày tháng năm sinh là: {0} ", NamSinh.ToString("d", viVn));
+            Output = Input.FindAll(delegate (HocSinh HS)
+            {
+                return HS.NamSinh == NamSinh;
+            });
+            InDanhSach(Output);
+            return Output;
+        }
+
         static List<HocSinh> SGioiTinh(List<HocSinh> Input, string str)
         {
             List<HocSinh> Output = new List<HocSinh>();
@@ -281,6 +331,7 @@ namespace BTTimKiem
 
         static void InDanhSach(List<HocSinh> Input)
         {
+            CultureInfo viVn = new CultureInfo("vi-VN");
             int IC = Input.Count();
             if (IC == 0)
             {
@@ -294,17 +345,17 @@ namespace BTTimKiem
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        Console.WriteLine(Input[i].ID + "." + Input[i].HoTen + " ....... " + Input[i].Tuoi + " ....... " + Input[i].GioiTinh);
+                        Console.WriteLine(Input[i].ID + "." + Input[i].HoTen + " ....... " + Input[i].Tuoi + " ....... " + Input[i].GioiTinh + " ....... " + Input[i].NamSinh.ToString("d", viVn));
                     }
                     Console.WriteLine("...");
-                    Console.WriteLine(Input[IC - 1].ID + "." + Input[IC - 1].HoTen + " ....... " + Input[IC - 1].Tuoi + " ....... " + Input[IC - 1].GioiTinh);
+                    Console.WriteLine(Input[IC - 1].ID + "." + Input[IC - 1].HoTen + " ....... " + Input[IC - 1].Tuoi + " ....... " + Input[IC - 1].GioiTinh + " ....... " + Input[IC - 1].NamSinh.ToString("d", viVn));
                     Console.Write("\n=> Có {0} kết quả cần tìm.", Input.Count);
                     Console.WriteLine(" Nhấm phím 'F1' để in đầy đủ danh sách.");
                     if (Console.ReadKey().Key == ConsoleKey.F1)
                     {
                         foreach (HocSinh HS in Input)
                         {
-                            Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
+                            Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + " ....... " + HS.NamSinh.ToString("d", viVn));
                         }
                     }
                 }
@@ -312,7 +363,7 @@ namespace BTTimKiem
                 {
                     foreach (HocSinh HS in Input)
                     {
-                        Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh);
+                        Console.WriteLine(HS.ID + "." + HS.HoTen + " ....... " + HS.Tuoi + " ....... " + HS.GioiTinh + " ....... " + HS.NamSinh.ToString("d", viVn));
                     }
                     Console.WriteLine("\n=> Có {0} kết quả cần tìm.", IC);
                 }
