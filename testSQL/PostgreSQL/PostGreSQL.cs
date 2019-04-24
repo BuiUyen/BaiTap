@@ -59,10 +59,8 @@ namespace PgSql
         }
 
         public List<string> PostgreSQLtest2()
-        {
-            String json_data = File.ReadAllText(@"C:\Users\ADMIN\Desktop\DanhSachHocSinh.json");
-            LopHS List = JsonConvert.DeserializeObject<LopHS>(json_data);
-            List<HocSinh> DanhSach = List.DanhSachHocSinh;
+        {            
+            List<HocSinh> DanhSach = Json.ReadJson();
             
             string connstring = "Server=localhost; Port=5432; User Id=uyen; Password=230798; Database=hocsinh;";
             NpgsqlConnection connection = new NpgsqlConnection(connstring);
@@ -70,7 +68,7 @@ namespace PgSql
 
 
             NpgsqlCommand command;
-            command = new NpgsqlCommand("DELETE FROM test;",connection);
+            command = new NpgsqlCommand("DELETE FROM test;",connection);// Xoa toan bo du lieu trong table
             command.ExecuteNonQuery();
 
             foreach (HocSinh HS in DanhSach)

@@ -18,11 +18,10 @@ namespace PgSql
       {
          PostGreSQL pgTest = new PostGreSQL();
          dataItems = pgTest.PostgreSQLtest1();
-         tbDataItems.Clear();
+         tbData.Clear();
          for (int i = 0; i < dataItems.Count; i++)
          {
-            tbDataItems.Text += dataItems[i];
-            tbDataItems.ScrollToCaret();
+            tbData.Text += dataItems[i];            
          }
       }
 
@@ -30,12 +29,16 @@ namespace PgSql
       {
          PostGreSQL pgTest = new PostGreSQL();
          dataItems = pgTest.PostgreSQLtest2();
-         tbDataItems.Clear();
+         tbData.Clear();
          for (int i = 0; i < dataItems.Count; i++)
          {
-            tbDataItems.Text += dataItems[i];
-            tbDataItems.ScrollToCaret();
+            tbData.Text += dataItems[i];            
          }
       }
-   }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }
